@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
 
@@ -8,39 +8,33 @@ const generateToken = (id) => {
 };
 
 const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  try {
+    const { name, email, password } = req.body;
 
-  const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email });
 
-  if (userExists) {
-    return res.status(400).json({
-      message: "User already exists",
+    if (userExists) {
+      return res.status(400).json({
+        message: "User already exists",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
     });
-  }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  const newUser = User.create({
-    name,
-    email,
-    password: hashedPassword,
-  });
-
-  if (newUser) {
     const otp = Math.floor(100000 + Math.random() * 900000);
-    const message = `Welcome ${newUser.name} to pickUp, we are glad to have you on board. 
-                    Thanks for registering with us. We are eager to fill you with the best experience.
-                    To complete your registration, please enter the following OTP:
-                    Your OTP is ${otp}.
-                    This OTP is valid for 24 hours only.`;
+    const message = `Welcome ${newUser.name} to pickUp, we are glad to have you on board. Thanks for registering with us. We are eager to fill you with the best experience. To complete your registration, please enter the following OTP: Your OTP is ${otp}.
+    This OTP is valid for 24 hours only.`;
 
     await sendEmail(email, "Welcome to pickUp - Your OTP", message);
-  }
 
-  res
-    .status(201)
-    .json({
+    return res.status(201).json({
       message: "User created successfully",
       user: {
         _id: newUser._id,
@@ -49,12 +43,13 @@ const registerUser = async (req, res) => {
         role: newUser.role,
         token: generateToken(newUser._id),
       },
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: "User creation failed",
-      });
     });
+  } catch (err) {
+    return res.status(500).json({
+      message: "User creation failed",
+      error: err.message,
+    });
+  }
 };
 
 const loginUser = async (req, res) => {
