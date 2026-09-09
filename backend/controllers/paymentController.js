@@ -1,26 +1,35 @@
-const instanceRazorPay = require("../config/razorPay");
+const Razorpay = require("razorpay");
 const crypto = require("crypto");
-const Order = require("../models/Order");
+
+dotenv = require("dotenv").config();
 
 const createOrder = async (req, res) => {
   try {
-    const instance = new instanceRazorPay();
+    const instance = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
 
     const options = {
       amount: req.body.amount * 100,
       currency: "INR",
       receipt: crypto.randomBytes(10).toString("hex"),
-      payment_capture: 1,
     };
-
     const order = await instance.orders.create(options);
+
+    if (!order) {
+      return res.status(400).json({
+        message: "Order not found through razorpay",
+      });
+    }
+
     res.status(200).json({
-      message: "Order created successfully",
+      message: "Order created successfully trough razorpay",
       order,
     });
   } catch (err) {
     res.status(500).json({
-      message: "Order creation failed",
+      message: "Order creation failed through razorpay",
       error: err.message,
     });
   }
@@ -28,21 +37,16 @@ const createOrder = async (req, res) => {
 
 const verifyPayment = async (req, res) => {
   try {
-    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;
-    const order = await Order.findOne({ razorpay_order_id: razorpay_order_id });
-    const secret = process.env.RAZORPAY_SECRET_KEY;
     const generated_signature = crypto
-      .createHmac("sha256", secret)
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(razorpay_order_id + "|" + razorpay_payment_id)
       .digest("hex");
+
     if (generated_signature === razorpay_signature) {
-      order.paymentId = razorpay_payment_id;
-      order.status = "pending";
-      await order.save();
       res.status(200).json({
         message: "Payment verified successfully",
-        order,
       });
     } else {
       res.status(400).json({

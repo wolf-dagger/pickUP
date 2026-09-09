@@ -16,7 +16,9 @@ router
   .route("/")
   .post(protectedMiddleware, createOrder)
   .get(protectedMiddleware, admin, getOrders);
+
 router.route("/myorders").get(protectedMiddleware, myOrders);
+
 router.route("/:id/status").put(protectedMiddleware, admin, updateOrderStatus);
 
 module.exports = router;

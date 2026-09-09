@@ -7,13 +7,7 @@ const createOrder = async (req, res) => {
   try {
     const { items, totalAmount, address, paymentId } = req.body;
 
-    if (
-      !items ||
-      items.length === 0 ||
-      !totalAmount ||
-      !address ||
-      !paymentId
-    ) {
+    if (!items || items.length === 0 || !totalAmount || !address) {
       return res.status(400).json({ message: "Invalid order data" });
     }
 
@@ -24,9 +18,12 @@ const createOrder = async (req, res) => {
       address,
       paymentId,
     });
+
     await order.save();
+
     const Ordermessage = `Hello ${req.user.name},\n\nYour order has been placed successfully with order id ${order._id}. We will get back to you soon.\n\nThank you for using our service.`;
     await sendEmail(req.user.email, "Order Confirmation", Ordermessage);
+
     res.status(201).json({
       message: "Order created successfully",
       order,
@@ -77,10 +74,8 @@ const getOrders = async (req, res) => {
 const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
-    const order = await Order.findById(req.params.id).populate(
-      "user",
-      "name email",
-    );
+    const order = await Order.findById(req.params.id);
+
     if (!order) {
       return res.status(400).json({
         message: "Order not found",
