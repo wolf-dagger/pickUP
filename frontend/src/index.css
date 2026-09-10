@@ -2,18 +2,28 @@
 
 :root {
   font-family: Inter, "Segoe UI", sans-serif;
-  color: #0f172a;
-  background-color: #f8fafc;
+  font-size: 14px;
+  color: #e2e8f0;
+  background-color: #020817;
   line-height: 1.5;
   font-weight: 400;
-  color-scheme: light;
-}
-
-html.dark {
   color-scheme: dark;
 }
 
-html.dark body {
+@media (min-width: 1024px) {
+  :root {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    font-size: 12.5px;
+  }
+}
+
+html,
+body {
   background-color: #020817;
   color: #e2e8f0;
 }
@@ -31,8 +41,8 @@ html {
 body {
   min-width: 320px;
   min-height: 100vh;
-  background: #f8fafc;
-  color: #0f172a;
+  background: #020817;
+  color: #e2e8f0;
   transition:
     background-color 0.2s ease,
     color 0.2s ease;

@@ -14,17 +14,17 @@ const ProductCard = ({ product }) => {
 
       {/* Content */}
       <div className="flex flex-col gap-2 px-1 pt-3 sm:px-2 sm:pt-4">
-        <h3 className="truncate text-lg font-bold italic text-slate-800 dark:text-slate-100 sm:text-base">
+        <h3 className="truncate text-[11px] font-bold italic text-slate-800 dark:text-slate-100 sm:text-xs lg:text-[11px] xl:text-xs">
           {product.name}
         </h3>
-        <p className="text-base font-semibold text-slate-900 dark:text-slate-50 sm:text-lg">
+        <p className="text-[10px] font-semibold text-slate-900 dark:text-slate-50 sm:text-[11px] lg:text-[10px] xl:text-[11px]">
           Price:{" "}
           <span className="text-orange-600">₹{product.price.toFixed(2)}</span>
         </p>
 
         <button className="w-full">
           <Link
-            className="w-[50%] rounded-lg inline-flex items-center justify-center bg-slate-900 py-2 text-sm font-bold italic text-white transition-colors hover:bg-orange-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-orange-400 sm:py-2.5"
+            className="w-[50%] rounded-lg inline-flex items-center justify-center bg-slate-900 py-2 text-[10px] font-bold italic text-white transition-colors hover:bg-orange-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-orange-400 sm:py-2.5 sm:text-[11px] lg:text-[10px] xl:text-[11px]"
             to={`/product/${product._id}`}
           >
             View Product
