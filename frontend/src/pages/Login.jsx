@@ -23,9 +23,13 @@ const Login = () => {
         }),
       });
 
+      if (!res.ok) {
+        alert("Invalid data");
+      }
+
       const data = await res.json();
       if (res.ok) {
-        login(data);
+        login(data.user);
         navigate("/");
       }
     } catch (err) {

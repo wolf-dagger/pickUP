@@ -145,20 +145,29 @@ const ProductDetail = () => {
             </li>
           </ol>
         </nav>
-        <div className="imageContent md:flex max-sm:flex max-sm:flex-col w-full h-screen mt-5 p-4 gap-2">
-          <div className="w-full h-1/2 md:h-[80%] flex justify-center items-center p-2">
+        <div className="imageContent md:flex max-sm:flex max-sm:flex-col w-full h-screen mt-5 p-4 gap-2 overflow-hidden">
+          <div className="w-full h-full flex justify-center items-center p-2">
             <img src={product.imageUrl} alt="product name" className="" />
           </div>
           <div className="textContent w-full h-1/2 md:h-[80%] p-5">
             <div className="flex flex-col gap-5">
               <p>Category: {product.category}</p>
-              <h1 className="text-3xl font-bold">{product.name}</h1>
-              <p className="text-lg font-bold">Price: ₹{product.price}</p>
-              <p className="text-lg font-bold">
+              <h1 className="text-3xl md:text-5xl font-bold">{product.name}</h1>
+              <p className="text-xl md:text-3xl font-bold">
+                Price: ₹{product.price}
+              </p>
+              <p className="text-xl font-medium">
                 Description: {product.description}
               </p>
-              <p>In Stock: {product.stock > 0 ? "In Stock" : "Out of Stock"}</p>
-              <p>Total Reviews: {product.numReviews}</p>
+              <p>
+                Stock:{" "}
+                {product.stock > 0 ? (
+                  <span className="text-green-600">In Stock</span>
+                ) : (
+                  <span className="text-red-600">Out of Stock</span>
+                )}
+              </p>
+              <p className="text-xl">Total Reviews: {product.numReviews}</p>
               <p>Rating: {product.rating}</p>
               <div className="flex justify-center items-center">
                 <button

@@ -3,26 +3,29 @@ import { Link } from "react-router-dom";
 const ItemCard = ({ product }) => {
   return (
     <>
-      <div className="block max-w-sm overflow-hidden rounded-lg border border-slate-700 bg-slate-900 shadow-sm">
-        <Link to={`/product/${product._id}`}>
-          <img
-            className="w-full rounded-t-lg"
-            src={product.imageUrl}
-            alt={product.name}
-          />
-        </Link>
-        <div className="p-6 text-center">
-          <span className="inline-flex items-center rounded-sm px-1.5 py-0.5 text-xs font-medium text-orange-400">
+      <div className="mainOuter max-w-lg h-75 md:h-125 rounded-lg p-2 border border-blue-400 shadow-md hover:shadow-blue-200  hover:scale-105 transition-transform duration-300 ease-in-out">
+        <div className="imageContent flex justify-center items-center rounded-lg">
+          <Link to={`/product/${product._id}`}>
+            <img
+              className="productImage h-40 md:h-80 w-full rounded-lg"
+              src={product.imageUrl}
+              alt={product.name}
+            />
+          </Link>
+        </div>
+        <div className="textContent flex flex-col justify-between items-center">
+          <h1 className="text-xl md:text-3xl font-semibold text-blue-400">
             {product.name.split(" ").slice(0, 2).join(" ")}
-          </span>
-          <h5 className="mb-6 mt-3 text-2xl font-semibold tracking-tight text-slate-100">
+          </h1>
+          <h5 className="mb-6 mt-3 text-2xl font-semibold tracking-tight text-slate-400">
             Price:{" "}
-            <span className="text-orange-600">₹{product.price.toFixed(2)}</span>
+            <span className="text-orange-700">₹{product.price.toFixed(2)}</span>
           </h5>
           <button>
             <Link
               to={`/product/${product._id}`}
-              className="inline-flex px-2! py-0.5! items-center rounded-lg bg-orange-500 text-sm font-medium leading-5 text-white shadow-sm transition-colors hover:bg-orange-400"
+              className="text-white bg-brand box-border border font-medium leading-5 rounded-base text-sm px-2 py-2 border-blue-500
+              w-80 hover:bg-blue-600 transition-colors duration-300 ease-in-out rounded-lg  cursor-pointer"
             >
               Product Details
             </Link>

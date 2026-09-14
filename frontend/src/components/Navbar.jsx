@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../context/authContext";
 import { useSelector } from "react-redux";
-import Register from "../pages/Register";
 import Home from "../pages/Home";
 
 const Navbar = () => {
@@ -35,7 +34,7 @@ const Navbar = () => {
                   <li>
                     <Link
                       to="/shop"
-                      className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-orange-400"
+                      className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-blue-400"
                     >
                       Shop
                     </Link>
@@ -44,7 +43,7 @@ const Navbar = () => {
                   <li>
                     <Link
                       to="/cart"
-                      className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-orange-400"
+                      className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-blue-400"
                     >
                       Cart ({cartItems.length})
                     </Link>
@@ -54,16 +53,16 @@ const Navbar = () => {
                     <li className="flex items-center gap-3">
                       <Link
                         to="/profile"
-                        className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-orange-400"
+                        className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-blue-400"
                       >
-                        Hi, {user.name}
+                        {user.name}
                       </Link>
 
                       {user.role === "admin" && (
                         <li>
                           <Link
                             to="/admin"
-                            className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-orange-400"
+                            className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-blue-400"
                           >
                             Admin
                           </Link>
@@ -84,19 +83,9 @@ const Navbar = () => {
                       <li>
                         <Link
                           to="/login"
-                          className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-orange-400"
+                          className="rounded-lg px-2 py-2 transition-all duration-200 hover:text-blue-400"
                         >
                           Login
-                        </Link>
-                      </li>
-
-                      <li>
-                        <Link
-                          to="/register"
-                          element={<Register />}
-                          className="rounded-lg text-white px-3 py-2 transition-all duration-200 hover:text-orange-400"
-                        >
-                          Register
                         </Link>
                       </li>
                     </>

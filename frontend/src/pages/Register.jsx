@@ -29,7 +29,7 @@ const Register = () => {
         alert(
           "User registered successfully. Please check your email for verification OTP.",
         );
-        login(data);
+        login(data.user);
         navigate("/");
       }
     } catch (err) {

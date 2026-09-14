@@ -27,11 +27,8 @@ const Shop = () => {
 
   return (
     <>
-      <div className="w-full h-10"></div>
-      <div className="featured-products w-full flex flex-col items-center justify-center gap-25 max-sm:gap-15">
-        <h1 className="bg-linear-to-r from-orange-500 to-white bg-clip-text text-transparent text-4xl font-bold uppercase">
-          Featured Products
-        </h1>
+      <div className="w-full mt-20 md:mt-40"></div>
+      <div className="-products w-full flex flex-col items-center justify-center gap-25 max-sm:gap-15">
         {loading ? (
           <div>Loading...</div>
         ) : (
