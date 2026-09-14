@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import About from "../pages/About";
 
 const Footer = () => {
   return (
@@ -22,10 +23,11 @@ const Footer = () => {
             <ul className="flex flex-wrap gap-x-6 gap-y-3 text-sm">
               <li>
                 <Link
-                  to="/shop"
+                  to="/about"
+                  element={<About />}
                   className="transition-colors duration-200 hover:text-orange-400"
                 >
-                  Shop
+                  About
                 </Link>
               </li>
 

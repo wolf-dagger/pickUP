@@ -10,7 +10,12 @@ connectDB();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://192.168.1.4:5173"],
+    credentials: true,
+  }),
+);
 
 app.get("/", (req, res) => {
   res.send("pickUP Backend is working fine");
