@@ -25,6 +25,7 @@ const createOrder = async (req, res) => {
 
     res.status(200).json({
       message: "Order created successfully trough razorpay",
+      keyId: process.env.RAZORPAY_KEY_ID,
       order,
     });
   } catch (err) {
