@@ -14,10 +14,10 @@ const ItemCard = ({ product }) => {
           </Link>
         </div>
         <div className="textContent flex flex-col justify-between items-center">
-          <h1 className="text-xl md:text-3xl font-semibold text-blue-400">
+          <h1 className="text-lg md:text-2xl font-semibold text-blue-400">
             {product.name.split(" ").slice(0, 2).join(" ")}
           </h1>
-          <h5 className="mb-6 mt-3 text-2xl font-semibold tracking-tight text-slate-400">
+          <h5 className="mb-2 mt-1 text-2xl font-semibold tracking-tight text-slate-400">
             Price:{" "}
             <span className="text-orange-700">₹{product.price.toFixed(2)}</span>
           </h5>

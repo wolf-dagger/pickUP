@@ -11,7 +11,7 @@ const Hero = () => {
               className="w-full h-full object-cover
               absolute"
             />
-            <div className="relative mt-20 bg-amber-50 w-full h-40 "></div>
+            {/* <div className="relative mt-20 bg-amber-50 w-full h-40 "></div> */}
           </div>
 
           {/* Desktop */}
