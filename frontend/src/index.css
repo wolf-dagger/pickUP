@@ -26,6 +26,10 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+@theme {
+  --breakpoint-xs: 450px;
+}
+
 @layer components {
   .flexgap {
     @apply flex flex-col gap-2;

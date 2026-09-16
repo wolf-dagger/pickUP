@@ -86,7 +86,7 @@ const Checkout = () => {
 
           if (saveOrderRes.ok) {
             dispatch(clearCart());
-            navigate("/ordersuccess");
+            navigate("/ordersucess");
           } else {
             alert("Order Saving Failed");
           }

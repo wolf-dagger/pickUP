@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AuthContext from "../context/authContext";
 import { useSelector } from "react-redux";
 import Home from "../pages/Home";
@@ -7,14 +7,8 @@ import Avatar from "react-avatar";
 import { IoCartOutline } from "react-icons/io5";
 
 const Navbar = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const cartItems = useSelector((state) => state.cart.cartItems);
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   return (
     <>
@@ -65,10 +59,6 @@ const Navbar = () => {
                           maxInitials={2}
                         />
                       </div>
-                    </Link>
-
-                    <Link to="/">
-                      <li onClick={handleLogout}>Logout</li>
                     </Link>
                   </div>
                 </>
