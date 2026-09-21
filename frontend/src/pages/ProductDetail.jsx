@@ -145,7 +145,7 @@ const ProductDetail = () => {
             </li>
           </ol>
         </nav>
-        <div className="imageContent md:flex max-sm:flex max-sm:flex-col w-full h-screen mt-5 p-4 gap-2 overflow-hidden">
+        <div className="imageContent md:flex max-sm:flex max-sm:flex-col w-full mt-5 p-4 gap-2 overflow-hidden">
           <div className="w-full h-full flex justify-center items-center p-2">
             <img src={product.imageUrl} alt="product name" className="" />
           </div>

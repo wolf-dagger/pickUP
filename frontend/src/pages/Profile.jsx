@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 import OrderItems from "../components/OrderItems";
+import AdminPanel from "../components/AdminPanel";
 
 const Profile = () => {
   const { user, logout } = useContext(AuthContext);
@@ -77,8 +78,8 @@ const Profile = () => {
         </div>
         {user.role === "admin" ? (
           <>
-            <div className="admin_panel">
-              <h1>admin Panel</h1>
+            <div className="admin_panel mt-5 mb-5 w-full flex justify-center items-center">
+              <AdminPanel />
             </div>
           </>
         ) : (

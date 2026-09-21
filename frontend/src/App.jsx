@@ -12,6 +12,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import Profile from "./pages/Profile";
+import AddProduct from "./admin/AddProduct";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/ordersucess" element={<OrderSuccess />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/add-product" element={<AddProduct />} />
         </Routes>
         {/* <Footer /> */}
       </Router>
