@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/sendEmail");
@@ -113,8 +114,81 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    if (req.user._id.toString() === req.params.id) {
+      return res.status(400).json({
+        message: "You cannot delete your own account",
+      });
+    }
+
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    await user.deleteOne();
+
+    res.status(200).json({
+      message: "User deleted successfully",
+      user,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: `User deletion failed: ${err}`,
+    });
+  }
+};
+
+const makeAdmin = async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({
+        message: "Invalid user id",
+      });
+    }
+
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    if (user.role === "admin") {
+      return res.status(400).json({
+        message: "User is already an admin",
+      });
+    }
+
+    user.role = "admin";
+    await user.save();
+
+    res.status(200).json({
+      message: "User made admin successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        verified: user.verified,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: `Failed to make user admin: ${err}`,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getAllUsers,
+  deleteUser,
+  makeAdmin,
 };

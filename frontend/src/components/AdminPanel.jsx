@@ -9,12 +9,13 @@ const AdminPanel = () => {
         </h1>
         <div className="w-full mt-5 mb-5">
           <div className="w-full flex justify-around items-center gap-10 mb-5">
-            <button
+            <Link
+              to="/all-users"
               className="text-white bg-brand box-border border font-normal font-mono leading-5 rounded-base text-sm md:text-2xl px-2 py-2 md:py-4 border-orange-500
-              w-80 hover:bg-orange-600 transition-colors duration-300 ease-in-out rounded-lg  cursor-pointer uppercase"
+              w-80 hover:bg-orange-600 transition-colors duration-300 ease-in-out rounded-lg  cursor-pointer uppercase text-center"
             >
-              Users
-            </button>
+              <button className="uppercase cursor-pointer">Users</button>
+            </Link>
             <Link
               to="/all-products"
               className="text-white bg-brand box-border border font-normal font-mono leading-5 rounded-base text-sm md:text-2xl px-2 py-2 md:py-4 border-blue-500

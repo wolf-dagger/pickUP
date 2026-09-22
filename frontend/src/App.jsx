@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import AddProduct from "./admin/AddProduct";
 import AllProducts from "./admin/AllProducts";
 import UpdateProduct from "./admin/UpdateProduct";
+import AllUsers from "./admin/AllUsers";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/add-product" element={<AddProduct />} />
           <Route path="/all-products" element={<AllProducts />} />
           <Route path="/update-product/:id" element={<UpdateProduct />} />
+          <Route path="/all-users" element={<AllUsers />} />
         </Routes>
         {/* <Footer /> */}
       </Router>

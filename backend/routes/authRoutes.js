@@ -9,10 +9,14 @@ const {
   registerUser,
   loginUser,
   getAllUsers,
+  deleteUser,
+  makeAdmin,
 } = require("../controllers/authController");
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/users", protectedMiddleware, admin, getAllUsers);
+router.delete("/users/:id", protectedMiddleware, admin, deleteUser);
+router.put("/users/:id/admin", protectedMiddleware, admin, makeAdmin);
 
 module.exports = router;
