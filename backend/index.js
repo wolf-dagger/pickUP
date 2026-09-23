@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 const connectDB = require("./config/db");
 
 const dotenv = require("dotenv");
@@ -22,7 +23,7 @@ app.use(
   }),
 );
 
-app.get("/", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.send("pickUP Backend is working fine");
 });
 
@@ -34,16 +35,18 @@ app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/api/analytics", require("./routes/analyticsRoutes"));
 
-if (process.env.NODE_ENV === "production") {
-  const frontendPath = path.join(__dirname, "../frontend/dist");
+const frontendPath = path.join(__dirname, "../frontend/dist");
+const frontendIndexPath = path.join(frontendPath, "index.html");
+
+if (fs.existsSync(frontendIndexPath)) {
   app.use(express.static(frontendPath));
 
   app.get("/{*splat}", (req, res) => {
-    res.sendFile(path.join(frontendPath, "index.html"));
+    res.sendFile(frontendIndexPath);
   });
 } else {
   app.get("/", (req, res) => {
-    res.send("pickUP API is runing in development mode");
+    res.send("pickUP API is running in development mode");
   });
 }
 
