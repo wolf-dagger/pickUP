@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AuthContext from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 import { clearCart } from "../redux/cartSlice";
+import toast from "react-hot-toast";
 
 const Checkout = () => {
   const { user } = useContext(AuthContext);
@@ -28,7 +29,9 @@ const Checkout = () => {
 
     try {
       if (!window.Razorpay) {
-        alert("Payment service is unavailable. Please refresh and try again.");
+        toast.error(
+          "Payment service is unavailable. Please refresh and try again.",
+        );
         setIsProcessing(false);
         return;
       }
@@ -47,7 +50,7 @@ const Checkout = () => {
       const orderData = await orderRes.json();
 
       if (!orderRes.ok) {
-        alert(orderData.message || "Unable to start payment");
+        toast.error(orderData.message || "Unable to start payment");
         setIsProcessing(false);
         return;
       }
@@ -69,7 +72,7 @@ const Checkout = () => {
 
             if (!verifyRes.ok) {
               setIsProcessing(false);
-              return alert("Payment verification failed");
+              return toast.error("Payment verification failed");
             }
 
             const saveOrderRes = await fetch("/api/orders", {
@@ -91,20 +94,24 @@ const Checkout = () => {
             });
 
             if (saveOrderRes.ok) {
+              toast.success("Payment successful. Your order is confirmed.");
               dispatch(clearCart());
               navigate("/ordersucess");
             } else {
               setIsProcessing(false);
-              alert("Order Saving Failed");
+              toast.error("Order saving failed. Please contact support.");
             }
           } catch (error) {
             console.error(error);
             setIsProcessing(false);
-            alert("Payment processing failed. Please try again.");
+            toast.error("Payment processing failed. Please try again.");
           }
         },
         modal: {
-          ondismiss: () => setIsProcessing(false),
+          ondismiss: () => {
+            setIsProcessing(false);
+            toast("Payment window closed", { icon: "i" });
+          },
         },
         prefill: {
           name: fullName,
@@ -115,18 +122,22 @@ const Checkout = () => {
       };
 
       const rzp1 = new window.Razorpay(options);
-      rzp1.on("payment.failed", () => setIsProcessing(false));
+      rzp1.on("payment.failed", () => {
+        setIsProcessing(false);
+        toast.error("Payment failed. You can try again.");
+      });
       rzp1.open();
     } catch (error) {
       console.error(error);
       setIsProcessing(false);
+      toast.error("Unable to start payment. Please try again.");
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!user) {
-      alert("Please login to checkout");
+      toast.error("Please log in before checkout");
       navigate("/login");
       return;
     }

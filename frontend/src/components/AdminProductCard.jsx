@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import AuthContext from "../context/authContext";
 import { useContext } from "react";
+import toast from "react-hot-toast";
 
 const AdminProductCard = ({ product }) => {
   const { user } = useContext(AuthContext);
@@ -19,9 +20,10 @@ const AdminProductCard = ({ product }) => {
       }
       console.log("Product deleted successfully");
       window.location.reload();
-      alert("Product deleted successfully");
+      toast.success("Product deleted successfully");
     } catch (err) {
       console.log(err);
+      toast.error(err.message || "Failed to delete product");
     }
   };
   return (

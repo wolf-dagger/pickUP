@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/authContext";
 import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const UpdateProduct = () => {
   const { id } = useParams();
@@ -80,10 +81,11 @@ const UpdateProduct = () => {
       }
 
       setProduct(data.product);
-      alert("Product updated successfully");
+      toast.success("Product updated successfully");
     } catch (err) {
       console.log(err);
       setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
       navigate("/all-products");

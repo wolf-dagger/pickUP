@@ -1,4 +1,18 @@
+import toast from "react-hot-toast";
+
 const CartItem = ({ cartItems, handleRemove, handleUpdateQty }) => {
+  const updateQuantity = (item, qty) => {
+    if (qty > 0) {
+      handleUpdateQty(item, qty);
+      toast.success("Cart quantity updated");
+    }
+  };
+
+  const removeItem = (id) => {
+    handleRemove(id);
+    toast.success("Item removed from cart");
+  };
+
   return (
     <>
       {cartItems.map((item) => (
@@ -28,19 +42,19 @@ const CartItem = ({ cartItems, handleRemove, handleUpdateQty }) => {
           <div className="cartButtn relative flex h-full w-[30%] flex-col items-center justify-center gap-2 sm:flex-row sm:justify-around">
             <button
               className="h-9 w-12 cursor-pointer rounded-lg border border-orange-500/70 text-white transition-colors duration-300 ease-in-out hover:bg-orange-600 md:h-10 md:w-16"
-              onClick={() => handleUpdateQty(item, item.qty - 1)}
+              onClick={() => updateQuantity(item, item.qty - 1)}
             >
               <h1 className="text-2xl">-</h1>
             </button>
             <button
               className="h-9 w-12 cursor-pointer rounded-lg border border-green-500/70 text-white transition-colors duration-300 ease-in-out hover:bg-green-600 md:h-10 md:w-16"
-              onClick={() => handleUpdateQty(item, item.qty + 1)}
+              onClick={() => updateQuantity(item, item.qty + 1)}
             >
               <h1 className="text-2xl">+</h1>
             </button>
             <button
               className="h-9 w-16 cursor-pointer rounded-lg border border-red-500/70 text-white transition-colors duration-300 ease-in-out hover:bg-red-600 md:h-10 md:w-20"
-              onClick={() => handleRemove(item._id)}
+              onClick={() => removeItem(item._id)}
             >
               <h1 className="text-lg">Remove</h1>
             </button>

@@ -1,15 +1,19 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../context/authContext";
+import toast from "react-hot-toast";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -24,21 +28,26 @@ const Login = () => {
       });
 
       if (!res.ok) {
-        alert("Invalid data");
+        const errorData = await res.json();
+        toast.error(errorData.message || "Invalid login details");
+        return;
       }
 
       const data = await res.json();
-      if (res.ok) {
-        login(data.user);
-        navigate("/");
-      }
+      login(data.user);
+      toast.success("Welcome back to pickUP");
+      navigate("/");
     } catch (err) {
       console.log(err);
+      toast.error("Unable to log in. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
+      {loading && <LoadingOverlay message="Signing you in..." />}
       <div className="w-full mt-35">
         <h1 className="text-3xl md:text-5xl uppercase font-bold bg-linear-to-r from-blue-400 via-blue-600 to-indigo-800 bg-clip-text text-transparent text-center mb-10">
           LOGIN
@@ -52,7 +61,7 @@ const Login = () => {
           >
             <div className="w-full mb-5 flexgap">
               <label
-                for="email"
+                htmlFor="email"
                 className="block mb-2.5 max-sm:text-sm text-xl font-medium text-heading"
               >
                 Email
@@ -68,7 +77,7 @@ const Login = () => {
             </div>
             <div className="mb-5 flexgap">
               <label
-                for="password"
+                htmlFor="password"
                 className="block mb-2.5 max-sm:text-sm text-xl font-medium text-heading"
               >
                 Password
@@ -82,7 +91,7 @@ const Login = () => {
                 required
               />
             </div>
-            <label for="remember" className="flex items-center mb-5 gap-2">
+            <label htmlFor="remember" className="flex items-center mb-5 gap-2">
               <input
                 id="remember"
                 type="checkbox"
@@ -101,10 +110,11 @@ const Login = () => {
             <div className="w-full flex justify-center">
               <button
                 type="submit"
+                disabled={loading}
                 className="text-white bg-brand box-border border font-medium leading-5 rounded-base text-sm px-2 py-2 border-blue-500
-              w-80 hover:bg-blue-600 transition-colors duration-300 ease-in-out rounded-lg  cursor-pointer"
+              w-80 hover:bg-blue-600 transition-colors duration-300 ease-in-out rounded-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
               >
-                LOG IN
+                {loading ? "Signing in..." : "LOG IN"}
               </button>
             </div>
           </form>

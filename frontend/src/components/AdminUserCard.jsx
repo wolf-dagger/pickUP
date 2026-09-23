@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import AuthContext from "../context/authContext";
+import toast from "react-hot-toast";
 
 const AdminUserCard = ({ user, onDeleted, onRoleUpdated }) => {
   const { user: currentUser } = useContext(AuthContext);
 
   const handleDelete = async () => {
     if (currentUser?._id === user._id) {
-      window.alert("You cannot delete your own account.");
+      toast.error("You cannot delete your own account.");
       return;
     }
 
@@ -29,8 +30,9 @@ const AdminUserCard = ({ user, onDeleted, onRoleUpdated }) => {
       }
 
       onDeleted(user._id);
+      toast.success("User deleted successfully");
     } catch (error) {
-      window.alert(error.message);
+      toast.error(error.message);
     }
   };
 
@@ -54,9 +56,9 @@ const AdminUserCard = ({ user, onDeleted, onRoleUpdated }) => {
       }
 
       onRoleUpdated(user._id, data.user);
-      window.alert("User made admin successfully.");
+      toast.success("User made admin successfully");
     } catch (error) {
-      window.alert(error.message);
+      toast.error(error.message);
     }
   };
 

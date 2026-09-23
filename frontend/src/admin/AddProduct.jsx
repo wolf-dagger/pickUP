@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import AuthContext from "../context/authContext";
+import toast from "react-hot-toast";
 
 const AddProduct = () => {
   const { user } = useContext(AuthContext);
@@ -44,7 +45,7 @@ const AddProduct = () => {
         throw new Error(data.message || "Product creation failed");
       }
 
-      alert("Product added successfully");
+      toast.success("Product added successfully");
       form.reset();
       setName("");
       setDescription("");
@@ -54,7 +55,7 @@ const AddProduct = () => {
       setCategory("");
     } catch (err) {
       console.log(err);
-      alert(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }

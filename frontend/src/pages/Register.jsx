@@ -1,15 +1,19 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../context/authContext";
+import toast from "react-hot-toast";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await fetch("/api/auth/register", {
@@ -26,18 +30,22 @@ const Register = () => {
 
       const data = await res.json();
       if (res.ok) {
-        alert(
-          "User registered successfully. Please check your email for verification OTP.",
-        );
+        toast.success("Account created. Welcome to pickUP!");
         login(data.user);
         navigate("/");
+      } else {
+        toast.error(data.message || "Registration failed");
       }
     } catch (err) {
       console.log(err);
+      toast.error("Unable to register. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <>
+      {loading && <LoadingOverlay message="Creating your account..." />}
       <>
         <div className="w-full mt-35">
           <h1 className="text-3xl md:text-5xl uppercase font-bold bg-linear-to-r from-blue-400 via-blue-600 to-indigo-800 bg-clip-text text-transparent text-center mb-10">
@@ -52,7 +60,7 @@ const Register = () => {
             >
               <div className="w-full mb-5 flexgap">
                 <label
-                  for="name"
+                  htmlFor="name"
                   className="block mb-2.5 max-sm:text-sm text-xl font-medium text-heading"
                 >
                   Name
@@ -68,7 +76,7 @@ const Register = () => {
               </div>
               <div className="w-full mb-5 flexgap">
                 <label
-                  for="email"
+                  htmlFor="email"
                   className="block mb-2.5 max-sm:text-sm text-xl font-medium text-heading"
                 >
                   Email
@@ -84,7 +92,7 @@ const Register = () => {
               </div>
               <div className="mb-5 flexgap">
                 <label
-                  for="password"
+                  htmlFor="password"
                   className="block mb-2.5 max-sm:text-sm text-xl font-medium text-heading"
                 >
                   Password
@@ -98,7 +106,10 @@ const Register = () => {
                   required
                 />
               </div>
-              <label for="remember" className="flex items-center mb-5 gap-2">
+              <label
+                htmlFor="remember"
+                className="flex items-center mb-5 gap-2"
+              >
                 <input
                   id="remember"
                   type="checkbox"
@@ -117,10 +128,11 @@ const Register = () => {
               <div className="w-full flex justify-center">
                 <button
                   type="submit"
+                  disabled={loading}
                   className="text-white bg-brand box-border border font-medium leading-5 rounded-base text-sm px-2 py-2 border-blue-500
-              w-80 hover:bg-blue-600 transition-colors duration-300 ease-in-out rounded-lg  cursor-pointer"
+              w-80 hover:bg-blue-600 transition-colors duration-300 ease-in-out rounded-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Create Account
+                  {loading ? "Creating account..." : "Create Account"}
                 </button>
               </div>
             </form>
