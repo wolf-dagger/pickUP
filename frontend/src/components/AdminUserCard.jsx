@@ -62,41 +62,50 @@ const AdminUserCard = ({ user, onDeleted, onRoleUpdated }) => {
 
   return (
     <>
-      <div className="w-full bg-blue-950 rounded-lg flex justify-between items-center p-2">
-        <div className="user-details flex flex-col gap-4">
-          <h1 className="text-xl md:text-2xl uppercase">{user.name}</h1>
-          <p className="text-lg">{user.email}</p>
-          <p className="text-lg text-orange-500">Role: {user.role}</p>
-        </div>
-        <div className="user-actions flex justify-between items-center gap-5">
-          <span
-            title={
-              user.role === "admin" ? "Admin cannot delete admin" : undefined
-            }
-          >
-            <button
-              className="px-4 py-2 ring ring-red-500 hover:bg-red-600 transition-colors duration-300 ease-in-out rounded-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
-              onClick={handleDelete}
-              disabled={user.role === "admin"}
+      <div className="group relative w-full overflow-hidden rounded-3xl border border-blue-500/20 bg-linear-to-br from-slate-900 via-blue-950 to-slate-900 p-4 shadow-lg shadow-blue-950/30 transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/50 hover:shadow-xl hover:shadow-blue-500/15 md:p-5">
+        <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-blue-500/10 blur-3xl transition-all duration-300 group-hover:bg-blue-400/20" />
+        <div className="relative flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div className="user-details flex flex-col gap-2">
+            <h1 className="text-xl font-semibold uppercase text-white md:text-2xl">
+              {user.name}
+            </h1>
+            <p className="break-all text-sm text-slate-300 md:text-base">
+              {user.email}
+            </p>
+            <p className="text-sm font-medium uppercase tracking-wider text-orange-400">
+              Role: {user.role}
+            </p>
+          </div>
+          <div className="user-actions flex flex-wrap items-center gap-3">
+            <span
+              title={
+                user.role === "admin" ? "Admin cannot delete admin" : undefined
+              }
             >
-              Delete
-            </button>
-          </span>
-          <span
-            title={
-              user.role === "admin"
-                ? "Admin cannot make admin admin"
-                : undefined
-            }
-          >
-            <button
-              className="px-4 py-2 ring ring-green-500 hover:bg-green-600 transition-colors duration-300 ease-in-out rounded-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
-              disabled={user.role === "admin"}
-              onClick={handleMakeAdmin}
+              <button
+                className="cursor-pointer rounded-lg border border-red-500/70 px-4 py-2 text-sm font-medium text-white transition-colors duration-300 ease-in-out hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+                onClick={handleDelete}
+                disabled={user.role === "admin"}
+              >
+                Delete
+              </button>
+            </span>
+            <span
+              title={
+                user.role === "admin"
+                  ? "Admin cannot make admin admin"
+                  : undefined
+              }
             >
-              Make Admin
-            </button>
-          </span>
+              <button
+                className="cursor-pointer rounded-lg border border-green-500/70 px-4 py-2 text-sm font-medium text-white transition-colors duration-300 ease-in-out hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent"
+                disabled={user.role === "admin"}
+                onClick={handleMakeAdmin}
+              >
+                Make Admin
+              </button>
+            </span>
+          </div>
         </div>
       </div>
     </>

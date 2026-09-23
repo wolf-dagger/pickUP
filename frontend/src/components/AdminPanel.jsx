@@ -32,12 +32,13 @@ const AdminPanel = () => {
             >
               <button className="uppercase">Add Product</button>
             </Link>
-            <button
+            <Link
+              to="/analytics"
               className="text-white bg-brand box-border border font-normal font-mono leading-5 rounded-base text-sm md:text-2xl px-2 py-2 md:py-4 border-purple-500
-              w-80 hover:bg-purple-600 transition-colors duration-300 ease-in-out rounded-lg  cursor-pointer uppercase"
+              w-80 hover:bg-purple-600 transition-colors duration-300 ease-in-out rounded-lg  cursor-pointer text-center"
             >
-              Analytics
-            </button>
+              <button className="uppercase">Analytics</button>
+            </Link>
           </div>
         </div>
       </div>

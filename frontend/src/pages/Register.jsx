@@ -39,7 +39,11 @@ const Register = () => {
   return (
     <>
       <>
-        <div className="w-full h-50"></div>
+        <div className="w-full mt-35">
+          <h1 className="text-3xl md:text-5xl uppercase font-bold bg-linear-to-r from-blue-400 via-blue-600 to-indigo-800 bg-clip-text text-transparent text-center mb-10">
+            REGISTER
+          </h1>
+        </div>
         <div className="flex justify-center align-middle h-full">
           <div className="flex flex-col rounded-xl border-2 border-blue-500 max-sm:w-[95%] w-[30%] h-135 mx-auto justify-center items-center m-auto">
             <form

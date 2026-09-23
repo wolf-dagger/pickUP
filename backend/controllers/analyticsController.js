@@ -19,7 +19,7 @@ const getAdminStats = async (req, res) => {
       totalUsers,
       totalOrders,
       totalProducts,
-      totalRevenue: totalRevenueData,
+      totalRevenue: totalRevenueData.toFixed(2),
     });
   } catch (err) {
     res.status(500).json({

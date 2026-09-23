@@ -15,6 +15,7 @@ const Checkout = () => {
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [country, setCountry] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const totalPrice = cartItems.reduce(
     (total, item) => total + Number(item.price) * Number(item.qty ?? 1),
@@ -23,10 +24,12 @@ const Checkout = () => {
 
   const handlePayment = async () => {
     const address = { fullName, street, city, postalCode, country };
+    setIsProcessing(true);
 
     try {
       if (!window.Razorpay) {
         alert("Payment service is unavailable. Please refresh and try again.");
+        setIsProcessing(false);
         return;
       }
 
@@ -45,6 +48,7 @@ const Checkout = () => {
 
       if (!orderRes.ok) {
         alert(orderData.message || "Unable to start payment");
+        setIsProcessing(false);
         return;
       }
 
@@ -56,40 +60,51 @@ const Checkout = () => {
         description: "Test Transaction",
         order_id: orderData.order.id,
         handler: async (response) => {
-          const verifyRes = await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(response),
-          });
+          try {
+            const verifyRes = await fetch("/api/payment/verify", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(response),
+            });
 
-          if (!verifyRes.ok) {
-            return alert("Payment verification failed");
+            if (!verifyRes.ok) {
+              setIsProcessing(false);
+              return alert("Payment verification failed");
+            }
+
+            const saveOrderRes = await fetch("/api/orders", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${user.token}`,
+              },
+              body: JSON.stringify({
+                items: cartItems.map((item) => ({
+                  productId: item._id,
+                  qty: item.qty ?? 1,
+                  price: item.price,
+                })),
+                totalAmount: totalPrice,
+                address,
+                paymentId: response.razorpay_payment_id,
+              }),
+            });
+
+            if (saveOrderRes.ok) {
+              dispatch(clearCart());
+              navigate("/ordersucess");
+            } else {
+              setIsProcessing(false);
+              alert("Order Saving Failed");
+            }
+          } catch (error) {
+            console.error(error);
+            setIsProcessing(false);
+            alert("Payment processing failed. Please try again.");
           }
-
-          const saveOrderRes = await fetch("/api/orders", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user.token}`,
-            },
-            body: JSON.stringify({
-              items: cartItems.map((item) => ({
-                productId: item._id,
-                qty: item.qty ?? 1,
-                price: item.price,
-              })),
-              totalAmount: totalPrice,
-              address,
-              paymentId: response.razorpay_payment_id,
-            }),
-          });
-
-          if (saveOrderRes.ok) {
-            dispatch(clearCart());
-            navigate("/ordersucess");
-          } else {
-            alert("Order Saving Failed");
-          }
+        },
+        modal: {
+          ondismiss: () => setIsProcessing(false),
         },
         prefill: {
           name: fullName,
@@ -100,9 +115,11 @@ const Checkout = () => {
       };
 
       const rzp1 = new window.Razorpay(options);
+      rzp1.on("payment.failed", () => setIsProcessing(false));
       rzp1.open();
     } catch (error) {
       console.error(error);
+      setIsProcessing(false);
     }
   };
 
@@ -124,7 +141,18 @@ const Checkout = () => {
             Checkout
           </h1>
         </div>
-        <div className="checkoutform ring-1 ring-slate-200 shadow-lg w-[90%] md:w-[55%] mx-auto p-4 rounded-lg">
+        <div className="checkoutform relative ring-1 ring-slate-200 shadow-lg w-[90%] md:w-[55%] mx-auto p-4 rounded-lg">
+          {isProcessing && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg bg-slate-950/90 p-6 text-center backdrop-blur-sm">
+              <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-400/30 border-t-cyan-300" />
+              <p className="mt-5 text-lg font-semibold text-white">
+                Processing your payment
+              </p>
+              <p className="mt-1 text-sm text-slate-400">
+                Please keep this window open.
+              </p>
+            </div>
+          )}
           <form
             className="w-[90%] mx-auto flex flex-col gap-4"
             onSubmit={handleSubmit}
@@ -213,10 +241,11 @@ const Checkout = () => {
             <div className="w-full flex justify-center">
               <button
                 type="submit"
+                disabled={isProcessing}
                 className="text-white bg-brand box-border border font-medium leading-5 rounded-base text-sm px-2 py-2 border-blue-500
-              w-80 hover:bg-blue-600 transition-colors duration-300 ease-in-out rounded-lg  cursor-pointer"
+              w-80 hover:bg-blue-600 transition-colors duration-300 ease-in-out rounded-lg cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Proceed to Payment
+                {isProcessing ? "Processing..." : "Proceed to Payment"}
               </button>
             </div>
           </form>
