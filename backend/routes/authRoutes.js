@@ -11,10 +11,12 @@ const {
   getAllUsers,
   deleteUser,
   makeAdmin,
+  updateUser,
 } = require("../controllers/authController");
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.put("/edit-user/:id", protectedMiddleware, updateUser);
 router.get("/users", protectedMiddleware, admin, getAllUsers);
 router.delete("/users/:id", protectedMiddleware, admin, deleteUser);
 router.put("/users/:id/admin", protectedMiddleware, admin, makeAdmin);

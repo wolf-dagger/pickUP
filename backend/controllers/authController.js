@@ -185,10 +185,78 @@ const makeAdmin = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({
+        message: "Invalid user id",
+      });
+    }
+
+    if (req.user._id.toString() !== req.params.id) {
+      return res.status(403).json({
+        message: "You can only update your own profile",
+      });
+    }
+
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const name = req.body.name?.trim();
+    const email = req.body.email?.trim().toLowerCase();
+
+    if (!name || !email) {
+      return res.status(400).json({
+        message: "Name and email are required",
+      });
+    }
+
+    const existingUser = await User.findOne({ email, _id: { $ne: user._id } });
+
+    if (existingUser) {
+      return res.status(409).json({
+        message: "Email is already in use",
+      });
+    }
+
+    user.name = name;
+    user.email = email;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "User updated successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        verified: user.verified,
+      },
+    });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({
+        message: "Email is already in use",
+      });
+    }
+
+    res.status(500).json({
+      message: `Failed to update user: ${err}`,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getAllUsers,
   deleteUser,
   makeAdmin,
+  updateUser,
 };

@@ -3,6 +3,7 @@ import AuthContext from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 import OrderItems from "../components/OrderItems";
 import AdminPanel from "../components/AdminPanel";
+import EditUserModel from "../components/EditUserModel";
 
 const Profile = () => {
   const { user, logout } = useContext(AuthContext);
@@ -64,9 +65,11 @@ const Profile = () => {
               </p>
             </div>
             <div className="action_buttons flex flex-col justify-center items-center gap-5">
-              <button className="ring-1 ring-blue-500 hover:bg-blue-500 w-full p-2 rounded-lg transition-colors duration-200">
-                Edit Profile
-              </button>
+              {/* <button className="ring-1 ring-blue-500 hover:bg-blue-500 w-full p-2 rounded-lg transition-colors duration-200"> */}
+              {/* Edit Profile */}
+              <EditUserModel />
+              {/* </button> */}
+
               <button
                 className="ring-1 ring-red-500 bg-red-500 hover:bg-transparent w-full p-2 rounded-lg transition-colors duration-200"
                 onClick={handleLogout}
